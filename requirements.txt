@@ -1,0 +1,16 @@
+ipdb
+flask
+gdown
+IPython
+opencv-python
+pillow
+torch
+torchvision 
+torchaudio
+tensorboardX
+numpy
+scikit-image
+paddlepaddle
+paddlehub
+gradio
+

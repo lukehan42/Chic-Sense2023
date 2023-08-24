@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>Fashion Classifier</title>
+    <style>
+        #capture-button {
+        /* 기존 스타일 유지 */
+            padding: 15px 30px; /* 버튼의 패딩을 조정하여 크기를 조절할 수 있습니다 */
+        }
+
+        .btn {
+            /* 기존 스타일 유지 */
+            font-size: 20px; /* 버튼의 폰트 크기를 조절할 수 있습니다 */
+            padding: 15px 30px; /* 버튼의 패딩을 조정하여 크기를 조절할 수 있습니다 */
+        }
+
+        body {
+            text-align: center;
+            background-color: #f4f4f4;
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            margin-top: 20px;
+        }
+        #camera-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+            position: relative;
+        }
+        #video {
+            max-width: 640px;
+            max-height: 480px;
+        }
+        #capture-button {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Fashion Classifier</h1>
+    <a href="/" class="btn btn-secondary btn-lg btn-block btn-lg active" role="button" aria-pressed="true">뒤로 가기</a>
+    <div id="camera-container">
+        <video id="video" autoplay width="640" height="480" src="{{ url_for('video_feed') }}"></video>
+        <button id="capture-button">사진 찍기</button>
+    </div>
+
+    <script>
+    const videoElement = document.getElementById('video');
+    const captureButton = document.getElementById('capture-button');
+
+    // 카메라 스트림 가져오기
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then(function (stream) {
+            videoElement.srcObject = stream;
+        })
+        .catch(function (error) {
+            console.error('카메라 스트림을 가져올 수 없습니다:', error);
+        });
+
+    // 사진 찍기 버튼 클릭 시
+    captureButton.addEventListener('click', async function () {
+        const canvas = document.createElement('canvas');
+        canvas.width = videoElement.videoWidth;
+        canvas.height = videoElement.videoHeight;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+
+        canvas.toBlob(function (blob) {
+            const formData = new FormData();
+            formData.append('image', blob, 'captured_image.jpg');
+
+            fetch('/upload', {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log('사진 업로드 성공');
+                } else {
+                    console.error('사진 업로드 실패');
+                }
+            });
+        }, 'image/jpeg');
+        captureButton.addEventListener('click', function () {
+            // 다른 페이지로 이동
+            window.location.href = "{{ url_for('image_prediction') }}";
+        });
+    });
+</script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
+
+</body>
+</html>

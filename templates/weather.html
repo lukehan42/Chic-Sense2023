@@ -1,0 +1,123 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>날씨 정보</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // 전역 변수로 현재 재생 중인 오디오 객체와 재생 상태를 추적할 변수를 추가합니다.
+        var currentAudio = null;
+        var isPlaying = false;
+
+        function showWeatherAlert(city, description, temperature, humidity) {
+            var message = city + "의 날씨 정보\n"
+                + "날씨: " + description + "\n"
+                + "온도: " + temperature + "°C\n"
+                + "습도: " + humidity + "%";
+
+            alert(message);
+        }
+
+        function playWeatherTTS(tts_file) {
+            // 이미 재생 중인 오디오가 있다면 중단합니다.
+            if (currentAudio) {
+                currentAudio.pause();
+                isPlaying = false;
+            }
+
+            var audio = new Audio(tts_file);
+            // 오디오가 재생 가능한 상태가 되면 재생합니다.
+            audio.addEventListener('canplaythrough', function () {
+                currentAudio = audio;
+                isPlaying = true;
+                audio.play();
+            });
+
+            // 오디오 로드에 실패했을 경우 처리합니다.
+            audio.addEventListener('error', function () {
+                alert("음성 파일을 로드하는 데 실패했습니다.");
+            });
+        }
+
+        function getWeatherTTS() {
+            $.post("/tts",
+                {
+                    city: $("#city").text(),
+                    description: $("#weather_description").text(),
+                    temperature: $("#temperature").text(),
+                    humidity: $("#humidity").text()
+                },
+                function (data, status) {
+                    if (status === "success") {
+                        playWeatherTTS(data);
+                    } else {
+                        alert("TTS 생성 실패");
+                    }
+                }
+            );
+        }
+
+        // TTS를 재생하는 함수
+        function playTTS() {
+            // 이미 재생 중인 오디오가 있다면 중단합니다.
+            if (currentAudio) {
+                currentAudio.pause();
+                isPlaying = false;
+            }
+            var audio = new Audio("{{ url_for('static', filename='weather_tts.mp3') }}");
+            // 오디오가 재생 가능한 상태가 되면 재생합니다.
+            audio.addEventListener('canplaythrough', function () {
+                currentAudio = audio;
+                isPlaying = true;
+                audio.play();
+            });
+
+            // 오디오 로드에 실패했을 경우 처리합니다.
+            audio.addEventListener('error', function () {
+                alert("음성 파일을 로드하는 데 실패했습니다.");
+            });
+        }
+
+        // 페이지가 로드되면 자동으로 TTS를 재생하고 날씨 정보를 알림
+        window.onload = function() {
+            playTTS();
+            showWeatherAlert('{{ city }}', '{{ description }}', '{{ temperature }}', '{{ humidity }}');
+        };
+
+        document.addEventListener("DOMContentLoaded", function () {
+            // 이미지 클릭 시 오디오 재생 이벤트 설정
+            const playButton = document.getElementById("playButton");
+            const audioPlayer = document.getElementById("audioPlayer");
+
+            playButton.addEventListener("click", function () {
+                audioPlayer.play();
+            });
+        });
+
+    </script>
+    <style>
+        .playButton {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <a href="/" class="btn btn-secondary btn-lg btn-block btn-lg active" role="button" aria-pressed="true">뒤로 가기</a>
+    <img src="/static/default.png" id="playButton" class="playButton" alt="오디오 재생 버튼">
+    <audio id="audioPlayer" controls>
+        <source src="/static/weather_tts.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+      integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+      crossorigin="anonymous"
+    />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chic Sense</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=yes"
+    />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+      integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+      crossorigin="anonymous"
+    />
+    <style>
+      body {
+        background-color: black;
+        color: #ffffff;
+      }
+      .ccard {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+      .caard {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+      .card .card-img-top {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+      }
+    </style>
+    <script>
+      // MP3 파일 경로들
+      const mp3FilePaths = [
+        "/static/내옷인식.mp3",
+        "/static/내옷장.mp3",
+        "/static/날씨확인.mp3",
+        "/static/커뮤니티.mp3",
+      ];
+
+      // 오디오 플레이어 생성
+      const audioPlayer = new Audio();
+
+      // 이미지를 클릭하면 호출되는 함수
+      function playAudio(index) {
+        const mp3FilePath = mp3FilePaths[index];
+        audioPlayer.src = mp3FilePath;
+        audioPlayer.play();
+      }
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <br />
+      <h1 class="text-center" style="background-color: black">Chic Sense</h1>
+    </div>
+    <a
+      href="/main1"
+      class="btn btn-secondary btn-lg btn-block btn-lg active"
+      rolse="button"
+      aria-pressed="true"
+      onclick="playAudio(4)"
+      >색상 바꾸기</a
+    >
+    <div class="ccard">
+      <a
+        href="/detection"
+        style="text-decoration: none; color: inherit"
+        onclick="playAudio(0)"
+      >
+        <div class="card" style="width: 18rem; background-color: black">
+          <img src="/static/detection_image.png" class="card-img-top" />
+          <div class="card-body">
+            <!-- .text-white 클래스를 .text-yellow로 변경 -->
+            <h5 class="card-title text-yellow">내 옷 인식</h5>
+            <p class="card-text text-yellow">옷 인식</p>
+          </div>
+        </div>
+      </a>
+
+      <a
+        href="/ACGPN"
+        style="text-decoration: none; color: inherit"
+        onclick="playAudio(0)"
+      >
+        <div class="card" style="width: 18rem; background-color: black">
+          <img src="/static/cloth_image.png" class="card-img-top" />
+          <div class="card-body">
+            <!-- .text-white 클래스를 .text-yellow로 변경 -->
+            <h5 class="card-title text-yellow">내 옷장</h5>
+            <p class="card-text text-yellow">내 옷장</p>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <div class="caard">
+      <a
+        href="/weather"
+        style="text-decoration: none; color: inherit"
+        onclick="playAudio(0)"
+      >
+        <div class="card" style="width: 18rem; background-color: black">
+          <img src="/static/weather_image.png" class="card-img-top" />
+          <div class="card-body">
+            <!-- .text-white 클래스를 .text-yellow로 변경 -->
+            <h5 class="card-title text-yellow">날씨 확인</h5>
+            <p class="card-text text-yellow">날씨 확인</p>
+          </div>
+        </div>
+      </a>
+    </div>
+    <hr />
+    <div>
+      <ul class="pagination justify-content-center">
+        <li>
+          <a href="#" style="margin-right: 5px" class="text-secondary"> ← </a>
+        </li>
+        <li>
+          <a href="#" style="margin-right: 5px" class="text-secondary"> 1 </a>
+        </li>
+        <li>
+          <a href="#" style="margin-right: 5px" class="text-secondary"> → </a>
+        </li>
+      </ul>
+    </div>
+
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+      integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+      integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+      integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+      crossorigin="anonymous"
+    />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>카메라 촬영</title>
+    <style>
+      #capture-button {
+        /* 기존 스타일 유지 */
+        padding: 15px 30px; /* 버튼의 패딩을 조정하여 크기를 조절할 수 있습니다 */
+      }
+
+      .btn {
+        /* 기존 스타일 유지 */
+        font-size: 20px; /* 버튼의 폰트 크기를 조절할 수 있습니다 */
+        padding: 15px 30px; /* 버튼의 패딩을 조정하여 크기를 조절할 수 있습니다 */
+      }
+
+      body {
+        text-align: center;
+        background-color: #f4f4f4;
+        font-family: Arial, sans-serif;
+      }
+      h1 {
+        margin-top: 20px;
+      }
+      #camera-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
+        position: relative;
+      }
+      #video {
+        max-width: 640px;
+        max-height: 480px;
+      }
+      #capture-button {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Fashion Classifier</h1>
+    <a
+      href="/"
+      class="btn btn-secondary btn-lg btn-block btn-lg active"
+      role="button"
+      aria-pressed="true"
+      >뒤로 가기</a
+    >
+    <h1>카메라 촬영</h1>
+
+    <video id="camera" autoplay></video>
+    <button id="captureBodyButton">캡쳐</button>
+    <canvas id="photoCanvas" style="display: none"></canvas>
+    <img id="capturedBodyPhoto" style="display: none; max-width: 100%" />
+    <img id="capturedClothesPhoto" style="display: none; max-width: 100%" />
+
+    <script>
+      const video = document.getElementById("camera");
+      const canvas = document.getElementById("photoCanvas");
+      const ctx = canvas.getContext("2d");
+      const capturedBodyPhoto = document.getElementById("capturedBodyPhoto");
+      const captureBodyButton = document.getElementById("captureBodyButton");
+
+      async function restartCamera() {
+        // 현재 비디오 스트림을 멈춥니다.
+        stopCamera();
+
+        // 다시 비디오 스트림을 시작합니다.
+        await startCamera();
+      }
+
+      // 비디오 스트림 시작
+      async function startCamera() {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({
+            video: true,
+          });
+
+          // Check if the camera access was granted
+          if (stream) {
+            video.srcObject = stream;
+          } else {
+            console.error("Camera access denied by the user.");
+          }
+        } catch (error) {
+          console.error("Error accessing the camera:", error);
+        }
+      }
+
+      // 비디오 스트림 멈춤
+      function stopCamera() {
+        const stream = video.srcObject;
+        const tracks = stream.getTracks();
+        tracks.forEach((track) => track.stop());
+      }
+
+      // 사진 찍기
+      function capturePhoto(targetElement) {
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        // 캡처된 사진 보이기
+        const photo = canvas.toDataURL("image/jpeg");
+        targetElement.src = photo;
+        targetElement.style.display = "block";
+
+        // 서버에 사진 업로드
+        canvas.toBlob((blob) => {
+          const formData = new FormData();
+          formData.append("file", blob, "captured_photo.jpg");
+
+          fetch("/capture_body", {
+            method: "POST",
+            body: formData,
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              console.log(data);
+              location.href = "/result";
+            })
+            .catch((error) => console.error("Error:", error));
+        });
+
+        // 비디오 스트림 멈추기
+        restartCamera();
+      }
+
+      // "몸을 찍기" 버튼 클릭 시
+      captureBodyButton.addEventListener("click", () => {
+        capturePhoto(capturedBodyPhoto);
+
+        startCamera();
+      });
+
+      // 페이지 로드 시 카메라 시작
+      startCamera();
+    </script>
+  </body>
+</html>

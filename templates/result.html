@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+      integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+      crossorigin="anonymous"
+    />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chic Sense</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=yes"
+    />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+      integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+      crossorigin="anonymous"
+    />
+    <title>이미지 표시</title>
+    <style>
+      #capture-button {
+        /* 기존 스타일 유지 */
+        padding: 15px 30px; /* 버튼의 패딩을 조정하여 크기를 조절할 수 있습니다 */
+      }
+
+      .btn {
+        /* 기존 스타일 유지 */
+        font-size: 20px; /* 버튼의 폰트 크기를 조절할 수 있습니다 */
+        padding: 15px 30px; /* 버튼의 패딩을 조정하여 크기를 조절할 수 있습니다 */
+      }
+
+      body {
+        text-align: center;
+        background-color: #f4f4f4;
+        font-family: Arial, sans-serif;
+      }
+      h1 {
+        margin-top: 20px;
+      }
+      #camera-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
+        position: relative;
+      }
+      #video {
+        max-width: 640px;
+        max-height: 480px;
+      }
+      #capture-button {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Fashion Classifier</h1>
+    <a
+      href="/"
+      class="btn btn-secondary btn-lg btn-block btn-lg active"
+      role="button"
+      aria-pressed="true"
+      >뒤로 가기</a
+    >
+    <h1>결과</h1>
+
+    <img src="../static/result/img_result.png" alt="Cloth Image" />
+  </body>
+</html>
