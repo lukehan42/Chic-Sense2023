@@ -1,0 +1,39 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Flask instance folder
+instance/
+.env
+
+# VSCode settings
+.vscode/
+
+# MacOS
+.DS_Store
+
+# Jupyter
+.ipynb_checkpoints
+
+# Logs
+*.log
+
+# Virtual environments
+venv/
+.env/
+.venv/
+
+# PyCharm
+.idea/
+
+# Model checkpoints, outputs
+*.h5
+*.ckpt
+*.pth
+*.pt
+
+# Large files or temp results
+*.tmp
+*.bak
+*.swp

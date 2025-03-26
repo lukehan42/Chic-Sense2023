@@ -21,7 +21,7 @@ api_endpoint = "https://api.openweathermap.org/data/2.5/weather"
 api_key = "e988dcd5742e41a5b9ca696d6d207115"
 
 
-model1 = keras.models.load_model('static/detection2.h5')
+model1 = keras.models.load_model('static/detection2.h5', compile=False)
 model2 = keras.models.load_model('static/color3.h5')
 model3 = keras.models.load_model('static/pattern2.h5')
 
